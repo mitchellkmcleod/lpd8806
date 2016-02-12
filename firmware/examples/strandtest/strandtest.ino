@@ -1,24 +1,35 @@
-#include "LPD8806.h"
-#include "SPI.h" // Comment out this line if using Trinket or Gemma
-#ifdef __AVR_ATtiny85__
- #include <avr/power.h>
-#endif
+// This #include statement was automatically added by the Particle IDE.
+#include "lpd8806.h"
 
 // Example to control LPD8806-based RGB LED Modules in a strip
-
 /*****************************************************************************/
+// This file was modified by Jeff Glancy (https://github.com/jeffglancy)
+//  in order to work with Particle Photon & RedBear Duo
 
 // Number of RGB LEDs in strand:
-int nLEDs = 32;
+uint16_t nLEDs = 32;
 
-// Chose 2 pins for output; can be any valid output pins:
-int dataPin  = 2;
-int clockPin = 3;
+// Chose SPI port for output; 
+uint8_t spi_num  = 0;
+
+// Photon/Duo output pins for reference:
+//
+// SPI 0 port
+//SS = A2 (default)
+//SCK = A3
+//MISO = A4
+//MOSI = A5
+//
+// SPI1 1 port
+//SS => D5 (default)
+//SCK => D4
+//MISO => D3
+//MOSI => D2
 
 // First parameter is the number of LEDs in the strand.  The LED strips
 // are 32 LEDs per meter but you can extend or cut the strip.  Next two
 // parameters are SPI data and clock pins:
-LPD8806 strip = LPD8806(nLEDs, dataPin, clockPin);
+lpd8806 strip = lpd8806(nLEDs, spi_num);
 
 // You can optionally use hardware SPI for faster writes, just leave out
 // the data and clock pin parameters.  But this does limit use to very
@@ -26,12 +37,9 @@ LPD8806 strip = LPD8806(nLEDs, dataPin, clockPin);
 // etc.), data = pin 11, clock = pin 13.  For Arduino Mega, data = pin 51,
 // clock = pin 52.  For 32u4 Breakout Board+ and Teensy, data = pin B2,
 // clock = pin B1.  For Leonardo, this can ONLY be done on the ICSP pins.
-//LPD8806 strip = LPD8806(nLEDs);
+//lpd8806 strip = lpd8806(nLEDs);
 
 void setup() {
-#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000L)
-  clock_prescale_set(clock_div_1); // Enable 16 MHz on Trinket
-#endif
 
   // Start up the LED strip
   strip.begin();
