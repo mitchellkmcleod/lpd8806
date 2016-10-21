@@ -4,7 +4,7 @@
 #ifndef __lpd8806_H__
 #define __lpd8806_H__
 
-#include "application.h"
+//#include "application.h"
 
 class lpd8806 {
 
